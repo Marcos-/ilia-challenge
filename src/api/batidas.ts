@@ -85,9 +85,6 @@ router.post('/', async function(req: Request, res: Response, next: NextFunction)
         const horasExcedentes =  moment.duration(horasTrabalhadas).subtract(moment.duration('PT8H'));
         const somaHorasExcedentes = moment.duration(horasExcedentes).add(moment.duration(folhaDePonto.horasExcedentes));
         folhaDePonto.horasExcedentes = somaHorasExcedentes.toISOString();
-
-        const subtractedHorasDevidas = moment.duration(folhaDePonto.horasDevidas).subtract(moment.duration(horasExcedentes));
-        folhaDePonto.horasDevidas = subtractedHorasDevidas.toISOString();
       }
       // Check if it is less than 8 hours
       if ( moment.duration(horasTrabalhadas) < moment.duration('PT8H')) {
@@ -95,8 +92,6 @@ router.post('/', async function(req: Request, res: Response, next: NextFunction)
         const somaHorasDevidas = moment.duration(horasDevidas).add(moment.duration(folhaDePonto.horasDevidas));
         folhaDePonto.horasDevidas = somaHorasDevidas.toISOString();
 
-        const subtractedHorasEscedentes = moment.duration(folhaDePonto.horasExcedentes).subtract(moment.duration(horasDevidas));
-        folhaDePonto.horasExcedentes = subtractedHorasEscedentes.toISOString();
       }
 
       await folhaDePonto.save();
